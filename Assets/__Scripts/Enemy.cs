@@ -32,10 +32,6 @@ public class Enemy : MonoBehaviour {
         {
             originalColors[i] = materials[i].color;
         }
-         if (PlayerPrefs.HasKey("HighScore")){
-            score = PlayerPrefs.GetInt("HighScore");
-            PlayerPrefs.SetInt("HighScore",score);
-        }
     }
 
     // This is a property: A method that acts like a field
@@ -64,11 +60,6 @@ public class Enemy : MonoBehaviour {
         {
             // We're off the bottom, so destroy this GameObject
             Destroy(gameObject);
-        }
-        Text gt = this.GetComponent<Text>();
-        gt.text = "High Score: "+score;
-        if (score > PlayerPrefs.GetInt("HighScore")){
-            PlayerPrefs.SetInt("HighScore", score);
         }
     }
 
