@@ -1344,7 +1344,9 @@ MonoBehaviour:
   - {fileID: 1808560890}
   - {fileID: 494030672}
   - {fileID: 511470548}
-  _shieldLevel: 1
+  _shieldLevel: 4
+  invincible: 0
+  time: 0
 --- !u!4 &1342965580
 Transform:
   m_ObjectHideFlags: 0

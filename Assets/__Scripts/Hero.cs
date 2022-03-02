@@ -19,6 +19,7 @@ public class Hero : MonoBehaviour {
     [Header("Set Dynamically")]
     [SerializeField]
     public float _shieldLevel = 1;
+    public bool invincible = false;
     
 
     // This variable holds a reference to the last triggering GameObject
@@ -28,6 +29,8 @@ public class Hero : MonoBehaviour {
     public delegate void WeaponFireDelegate();
     // Create a WeaponFireDelegate field named fireDelegate.
     public WeaponFireDelegate fireDelegate;
+
+    public float time = 0;
 
 	void Start()
     {
@@ -69,6 +72,15 @@ public class Hero : MonoBehaviour {
         {
             fireDelegate();
         }
+        if (invincible == true)
+        {
+            time += Time.deltaTime;
+            if (time >= 10)
+            {
+                invincible = false;
+                time = 0;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -86,8 +98,15 @@ public class Hero : MonoBehaviour {
 
         if(go.tag == "Enemy")
         {
-            shieldLevel--;
-            Destroy(go);
+            if (invincible == true)
+            {
+                Destroy(go);
+            }
+            else
+            {
+                shieldLevel--;
+                Destroy(go);
+            }
         }
         else if (go.tag == "PowerUp")
         {
@@ -106,6 +125,11 @@ public class Hero : MonoBehaviour {
         switch (pu.type)
         {
             case WeaponType.shield:
+                if (_shieldLevel == 4)
+                {
+                    invincible = true;
+                    time = 0;
+                }
                 shieldLevel++;
                 break;
 
@@ -138,7 +162,7 @@ public class Hero : MonoBehaviour {
         }
         set
         {
-            _shieldLevel = Mathf.Min(value, 4);
+            _shieldLevel = Mathf.Min(value, 5);
             // If the shield is going to be set to less than zero
             if (value < 0)
             {
