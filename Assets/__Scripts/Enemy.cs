@@ -19,9 +19,16 @@ public class Enemy : MonoBehaviour {
     public bool showingDamage = false;
     public float damageDoneTime; // Time to stop showing damage
     public bool notifiedOfDestruction = false; // Will be used later
-
+    private int limit = 0;
     protected BoundsCheck bndCheck;
-
+    [Header("Set Dynamically")]
+     public Text scoreGT;
+    public void Start()
+    {
+        GameObject scoreGO = GameObject.Find("ScoreCounter");
+        scoreGT = scoreGO.GetComponent<Text>();
+        scoreGT.text = "0";
+    }
     private void Awake()
     {
         bndCheck = GetComponent<BoundsCheck>();
@@ -98,6 +105,12 @@ public class Enemy : MonoBehaviour {
                     notifiedOfDestruction = true;
                     // Destroy this enemy
                     Destroy(this.gameObject);
+                    int score = int.Parse(scoreGT.text);
+                     score+=100;
+                     scoreGT.text=score.ToString();
+                    if(score >HighScore.score){
+                     HighScore.score = score;
+                    }
                 }
                 Destroy(otherGO);
                 break;

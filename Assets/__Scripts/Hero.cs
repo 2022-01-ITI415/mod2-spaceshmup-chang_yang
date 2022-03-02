@@ -16,7 +16,6 @@ public class Hero : MonoBehaviour {
     public float projectileSpeed = 40;
     public Weapon[] weapons;
     [Header("Set Dynamically")]
-    public Text scoreGT;
     [Header("Set Dynamically")]
     [SerializeField]
     public float _shieldLevel = 1;
@@ -32,9 +31,6 @@ public class Hero : MonoBehaviour {
 
 	void Start()
     {
-        GameObject scoreGO = GameObject.Find("ScoreCounter");
-        scoreGT = scoreGO.GetComponent<Text>();
-        scoreGT.text = "0";
         if (S == null)
         {
             S = this; // Set the Singleton
