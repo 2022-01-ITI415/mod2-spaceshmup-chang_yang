@@ -8,8 +8,7 @@ public class Enemy : MonoBehaviour {
     [Header("Set in Inspector: Enemy")]
     public float speed = 10f; // The speed in m/s
     public float fireRate = 0.3f; // Seconds/shot (Unused)
-    public float health = 10;
-    public int score = 100; // Points earned for destroying this
+    public float health = 10; // Points earned for destroying this
     public float showDamageDuration = 0.1f; // # seconds to show damage
     public float powerUpDropChance = 1f; // Chance to drop a power-up
 
@@ -21,12 +20,7 @@ public class Enemy : MonoBehaviour {
     public bool notifiedOfDestruction = false; // Will be used later
     private int limit = 0;
     protected BoundsCheck bndCheck;
-    [Header("Set Dynamically")]
-     public Text scoreGT;
-    public void Start()
-    {
-
-    }
+    
     private void Awake()
     {
         bndCheck = GetComponent<BoundsCheck>();

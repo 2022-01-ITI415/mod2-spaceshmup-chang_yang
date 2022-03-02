@@ -30,7 +30,7 @@ public class Main : MonoBehaviour
     {
         GameObject scoreGO = GameObject.Find("ScoreCounter");
         scoreGT = scoreGO.GetComponent<Text>();
-        scoreGT.text = "0";
+        scoreGT.text = "Score: 0";
     }
 
     public void ShipDestroyed(Enemy e)
@@ -131,7 +131,7 @@ public class Main : MonoBehaviour
     public void GetScore()
     {
         score += 100;
-        scoreGT.text = score.ToString();
+        scoreGT.text = "Score: " + score.ToString();
         if (score > HighScore.score)
         {
             HighScore.score = score;
