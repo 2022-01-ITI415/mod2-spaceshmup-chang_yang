@@ -25,9 +25,7 @@ public class Enemy : MonoBehaviour {
      public Text scoreGT;
     public void Start()
     {
-        GameObject scoreGO = GameObject.Find("ScoreCounter");
-        scoreGT = scoreGO.GetComponent<Text>();
-        scoreGT.text = "0";
+
     }
     private void Awake()
     {
@@ -105,12 +103,7 @@ public class Enemy : MonoBehaviour {
                     notifiedOfDestruction = true;
                     // Destroy this enemy
                     Destroy(this.gameObject);
-                    int score = int.Parse(scoreGT.text);
-                     score+=100;
-                     scoreGT.text=score.ToString();
-                    if(score >HighScore.score){
-                     HighScore.score = score;
-                    }
+                    Main.S.GetScore();
                 }
                 Destroy(otherGO);
                 break;

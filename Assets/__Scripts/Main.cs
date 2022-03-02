@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class Main : MonoBehaviour {
+public class Main : MonoBehaviour
+{
 
     static public Main S; // A singleton for Main
     static Dictionary<WeaponType, WeaponDefinition> WEAP_DICT;
@@ -19,9 +21,19 @@ public class Main : MonoBehaviour {
         WeaponType.blaster, WeaponType.blaster, WeaponType.spread, WeaponType.shield
     };
 
+    public Text scoreGT;
+    public int score = 0;
+
     private BoundsCheck bndCheck;
 
-    public void ShipDestroyed( Enemy e)
+    private void Start()
+    {
+        GameObject scoreGO = GameObject.Find("ScoreCounter");
+        scoreGT = scoreGO.GetComponent<Text>();
+        scoreGT.text = "0";
+    }
+
+    public void ShipDestroyed(Enemy e)
     {
         // Potentially generate a PowerUp
         if (Random.value <= e.powerUpDropChance)
@@ -52,7 +64,7 @@ public class Main : MonoBehaviour {
 
         // A generic Dictionary with WeaponType as the key
         WEAP_DICT = new Dictionary<WeaponType, WeaponDefinition>();
-        foreach(WeaponDefinition def in weaponDefinitions)
+        foreach (WeaponDefinition def in weaponDefinitions)
         {
             WEAP_DICT[def.type] = def;
         }
@@ -114,5 +126,15 @@ public class Main : MonoBehaviour {
         // This returns a new WeaponDefinition with a type of WeaponType.none,
         // which means it has failed to find the right WeaponDefinition
         return new WeaponDefinition();
+    }
+
+    public void GetScore()
+    {
+        score += 100;
+        scoreGT.text = score.ToString();
+        if (score > HighScore.score)
+        {
+            HighScore.score = score;
+        }
     }
 }
