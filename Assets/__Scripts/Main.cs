@@ -12,7 +12,7 @@ public class Main : MonoBehaviour
 
     [Header("Set in Inspector")]
     public GameObject[] prefabEnemies; // Array of Enemy prefabs
-    public float enemySpawnPerSecond = 0.5f; // # Enemies/second
+    public float enemySpawnPerSecond = 0.2f; // # Enemies/second
     public float enemyDefaultPadding = 1.5f; // Padding for position
     public WeaponDefinition[] weaponDefinitions;
     public GameObject prefabPowerUp;
@@ -23,6 +23,7 @@ public class Main : MonoBehaviour
 
     public Text scoreGT;
     public int score = 0;
+    public int health = 5;
 
     private BoundsCheck bndCheck;
 
@@ -75,6 +76,7 @@ public class Main : MonoBehaviour
         // Pick a random Enemy prefab to instantiate
         int ndx = Random.Range(0, prefabEnemies.Length);
         GameObject go = Instantiate<GameObject>(prefabEnemies[ndx]);
+        go.GetComponent<Enemy>().health = this.health;
 
         // Position the ENemy above the screen with a random x position
         float enemyPadding = enemyDefaultPadding;

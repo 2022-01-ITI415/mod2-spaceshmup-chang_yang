@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 
+    static public Enemy S;
     [Header("Set in Inspector: Enemy")]
     public float speed = 10f; // The speed in m/s
     public float fireRate = 0.3f; // Seconds/shot (Unused)
-    public float health = 10; // Points earned for destroying this
+    public float health = 0.5f; // Points earned for destroying this
     public float showDamageDuration = 0.1f; // # seconds to show damage
     public float powerUpDropChance = 1f; // Chance to drop a power-up
 
