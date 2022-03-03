@@ -402,6 +402,7 @@ MonoBehaviour:
   scoreGT: {fileID: 0}
   score: 0
   health: 5
+  boss: {fileID: 3921006788967369905, guid: 95dd1ba063062be49a5ac1c5a1ed166b, type: 3}
 --- !u!20 &282840813
 Camera:
   m_ObjectHideFlags: 0
@@ -1344,9 +1345,11 @@ MonoBehaviour:
   - {fileID: 1808560890}
   - {fileID: 494030672}
   - {fileID: 511470548}
-  _shieldLevel: 4
+  _shieldLevel: 1
   invincible: 0
   time: 0
+  originalColors: []
+  materials: []
 --- !u!4 &1342965580
 Transform:
   m_ObjectHideFlags: 0

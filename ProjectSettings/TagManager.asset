@@ -10,6 +10,9 @@ TagManager:
   - ProjectileEnemy
   - PowerUp
   - PowerUpBox
+  - Boss
+  - Invincible
+  - Laser
   layers:
   - Default
   - TransparentFX

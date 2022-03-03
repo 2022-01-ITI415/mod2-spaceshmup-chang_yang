@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour {
     [Header("Set in Inspector: Enemy")]
     public float speed = 10f; // The speed in m/s
     public float fireRate = 0.3f; // Seconds/shot (Unused)
-    public float health = 0.5f; // Points earned for destroying this
+    public float health = 5f; // Points earned for destroying this
     public float showDamageDuration = 0.1f; // # seconds to show damage
     public float powerUpDropChance = 1f; // Chance to drop a power-up
 
@@ -85,6 +85,13 @@ public class Enemy : MonoBehaviour {
                 }
 
                 // Hurt this Enemy
+                if (this.tag == "Invincible")
+                {
+                    BossInvcible();
+                    Destroy(otherGO);
+                    break;
+                }
+
                 ShowDamage();
                 // Get the damage amount from the Main WEAP_DICT
                 health -= Main.GetWeaponDefinition(p.type).damageOnHit;
@@ -114,6 +121,16 @@ public class Enemy : MonoBehaviour {
         foreach (Material m in materials)
         {
             m.color = Color.red;
+        }
+        showingDamage = true;
+        damageDoneTime = Time.time + showDamageDuration;
+    }
+
+    void BossInvcible()
+    {
+        foreach (Material m in materials)
+        {
+            m.color = Color.yellow;
         }
         showingDamage = true;
         damageDoneTime = Time.time + showDamageDuration;

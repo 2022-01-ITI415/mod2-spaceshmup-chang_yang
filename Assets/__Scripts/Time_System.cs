@@ -21,6 +21,8 @@ public class Time_System : MonoBehaviour
 
     private Text timeGT;
     private Text levelGT;
+
+    private bool boss;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +33,8 @@ public class Time_System : MonoBehaviour
         GameObject levelGO = GameObject.Find("LevelCounter");
         levelGT = levelGO.GetComponent<Text>();
         levelGT.text = "Level: 0/5";
+
+        boss = false;
     }
 
     private void FixedUpdate()
@@ -42,11 +46,21 @@ public class Time_System : MonoBehaviour
         second = (int)time - hour * 3600 - minute * 60;
 
         timeGT.text = "Time: " + string.Format("{0:D2}:{1:D2}:{2:D2}", hour, minute, second);
-        levelGT.text = "Level: " + level.ToString() + "/5";
+
+        if (level == 6)
+        {
+            levelGT.text = "Level: Boss";
+        }
+        else
+        {
+            levelGT.text = "Level: " + level.ToString() + "/5";
+        }
+
 
         if (time > levelTimeInterval && time <= (levelTimeInterval * 2))
         {
             Main.S.enemySpawnPerSecond = level_1_ESPS;
+
             level = 1;
         }
         else if (time > (levelTimeInterval * 2) && time <= (levelTimeInterval * 3))
@@ -64,11 +78,22 @@ public class Time_System : MonoBehaviour
             Main.S.enemySpawnPerSecond = level_4_ESPS;
             level = 4;
         }
-        else if (time > (levelTimeInterval * 5))
+        else if (time > (levelTimeInterval * 5) && time <= (levelTimeInterval * 6))
         {
             Main.S.health = 10;
             level = 5;
         }
+        else if (time > (levelTimeInterval * 6))
+        {
+            Main.S.enemySpawnPerSecond = 0.2f;
+            if (boss == false)
+            {
+                Main.S.SpawnBoss();
+                boss = true;
+            }
+            level = 6;
+        }
+
     }
 
 

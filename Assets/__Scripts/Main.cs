@@ -24,6 +24,7 @@ public class Main : MonoBehaviour
     public Text scoreGT;
     public int score = 0;
     public int health = 5;
+    public GameObject boss;
 
     private BoundsCheck bndCheck;
 
@@ -138,5 +139,15 @@ public class Main : MonoBehaviour
         {
             HighScore.score = score;
         }
+    }
+
+    public void SpawnBoss()
+    {
+        GameObject go = Instantiate<GameObject>(boss);
+
+
+        Vector3 pos = Vector3.zero;
+        pos.y = 60;
+        go.transform.position = pos;
     }
 }

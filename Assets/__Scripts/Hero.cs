@@ -16,7 +16,6 @@ public class Hero : MonoBehaviour {
     public float projectileSpeed = 40;
     public Weapon[] weapons;
     [Header("Set Dynamically")]
-    [Header("Set Dynamically")]
     [SerializeField]
     public float _shieldLevel = 1;
     public bool invincible = false;
@@ -32,7 +31,10 @@ public class Hero : MonoBehaviour {
 
     public float time = 0;
 
-	void Start()
+    public Color[] originalColors;
+    public Material[] materials;
+
+    void Start()
     {
         if (S == null)
         {
@@ -47,6 +49,13 @@ public class Hero : MonoBehaviour {
         // Reset the weapons to start _Hero with 1 blaster
         ClearWeapons();
         weapons[0].SetType(WeaponType.blaster);
+
+        materials = Utils.GetAllMaterials(gameObject);
+        originalColors = new Color[materials.Length];
+        for (int i = 0; i < materials.Length; i++)
+        {
+            originalColors[i] = materials[i].color;
+        }
     }
 	
 	// Update is called once per frame
@@ -78,6 +87,7 @@ public class Hero : MonoBehaviour {
             if (time >= 10)
             {
                 invincible = false;
+                NotInvincible();
                 time = 0;
             }
         }
@@ -90,13 +100,16 @@ public class Hero : MonoBehaviour {
         print("Triggered: " + go.name);
 
         // Make sure it's not the same triggering go as last time
-        if (go == lastTriggerGo)
+        if (go.tag != "Laser" )
         {
-            return;
+            if (go == lastTriggerGo)
+            {
+                return;
+            }
         }
         lastTriggerGo = go;
 
-        if(go.tag == "Enemy")
+        if(go.tag == "Enemy" || go.tag == "ProjectileEnemy")
         {
             if (invincible == true)
             {
@@ -106,6 +119,23 @@ public class Hero : MonoBehaviour {
             {
                 shieldLevel--;
                 Destroy(go);
+            }
+        }
+        else if (go.tag == "Boss" || go.tag == "Invincible")
+        {
+            if (invincible == false)
+            {
+                shieldLevel -= 5;
+            }
+        }
+        else if (go.tag == "Laser")
+        {
+            if (invincible == false)
+            {
+                invincible = true;
+                IsInvincible();
+                time = 8;
+                shieldLevel--;
             }
         }
         else if (go.tag == "PowerUp")
@@ -128,6 +158,7 @@ public class Hero : MonoBehaviour {
                 if (_shieldLevel == 4)
                 {
                     invincible = true;
+                    IsInvincible();
                     time = 0;
                 }
                 shieldLevel++;
@@ -162,7 +193,7 @@ public class Hero : MonoBehaviour {
         }
         set
         {
-            _shieldLevel = Mathf.Min(value, 5);
+            _shieldLevel = Mathf.Min(value, 4);
             // If the shield is going to be set to less than zero
             if (value < 0)
             {
@@ -190,6 +221,22 @@ public class Hero : MonoBehaviour {
         foreach (Weapon w in weapons)
         {
             w.SetType(WeaponType.none);
+        }
+    }
+
+    void IsInvincible()
+    {
+        foreach (Material m in materials)
+        {
+            m.color = Color.yellow;
+        }
+    }
+
+    void NotInvincible()
+    {
+        for (int i = 0; i < materials.Length; i++)
+        {
+            materials[i].color = originalColors[i];
         }
     }
 }
