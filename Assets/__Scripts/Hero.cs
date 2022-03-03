@@ -131,6 +131,7 @@ public class Hero : MonoBehaviour {
         {
             if (invincible == true)
             {
+                Main.S.GetScore();
                 Destroy(go);
             }
             else
