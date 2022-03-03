@@ -68,6 +68,10 @@ public class Weapon : MonoBehaviour {
         {
             rootGO.GetComponent<Hero>().fireDelegate += Fire;
         }
+        if (rootGO.GetComponent<Skill>() != null)
+        {
+            rootGO.GetComponent<Skill>().fireDelegate += Fire;
+        }
     }
 
     public WeaponType type

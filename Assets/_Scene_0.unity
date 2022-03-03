@@ -1346,7 +1346,10 @@ MonoBehaviour:
   - {fileID: 494030672}
   - {fileID: 511470548}
   _shieldLevel: 1
-  invincible: 0
+  skillPrefab: {fileID: 6009888329366957254, guid: 29d76b09a96d36947a172f741019e06d,
+    type: 3}
+  skill: 3
+  skillTime: 5
   time: 0
   originalColors: []
   materials: []

@@ -18,8 +18,13 @@ public class Hero : MonoBehaviour {
     [Header("Set Dynamically")]
     [SerializeField]
     public float _shieldLevel = 1;
-    public bool invincible = false;
+    [Header("Set Skill")]
+    public GameObject skillPrefab;
+    public int skill = 3;
+    public float skillTime = 5;
     
+    private bool invincible = false;
+    public bool skillOn = false;
 
     // This variable holds a reference to the last triggering GameObject
     private GameObject lastTriggerGo = null;
@@ -81,6 +86,16 @@ public class Hero : MonoBehaviour {
         {
             fireDelegate();
         }
+        if (Input.GetKeyDown(KeyCode.E) && skill > 0 && skillOn == false)
+        {
+            UseSkill();
+            skillOn = true;
+            invincible = true;
+            IsInvincible();
+            time = 10 - skillTime;
+            skill -= 1;
+        }
+
         if (invincible == true)
         {
             time += Time.deltaTime;
@@ -238,5 +253,14 @@ public class Hero : MonoBehaviour {
         {
             materials[i].color = originalColors[i];
         }
+    }
+
+    void UseSkill()
+    {
+        GameObject go = Instantiate<GameObject>(skillPrefab);
+
+        Vector3 pos = transform.position;
+        pos.y = pos.y -80;
+        go.transform.position = pos;
     }
 }
