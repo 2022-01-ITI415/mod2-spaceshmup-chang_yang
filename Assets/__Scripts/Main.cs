@@ -22,12 +22,14 @@ public class Main : MonoBehaviour
     };
 
     [Header("Others")]
+    public float gameRestartDelay = 5f;
     public Text scoreGT;
     public int score = 0;
     public int health = 5;
     public int skill = 3;
     public GameObject boss;
     public GameObject wingPlane;
+    public GameObject win;
     public List<GameObject> wingList;
 
     private BoundsCheck bndCheck;
@@ -163,4 +165,9 @@ public class Main : MonoBehaviour
         pos.y = 60;
         go.transform.position = pos;
     }
+
+    public void Win()
+    {
+        win.SetActive(true);
+}
 }

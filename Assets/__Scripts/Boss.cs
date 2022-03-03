@@ -12,7 +12,11 @@ public class Boss : Enemy
     public float rotSpeed = 0.02f;
 
     public bool isready;
+    public bool secStage = false;
+    public float transformTime = 0;
     private Vector3 bossPos = new Vector3(0, 18, 0);
+    private bool transformingOn = true;
+    private bool started = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,12 +27,13 @@ public class Boss : Enemy
     // Update is called once per frame
     public override void Move()
     {
-        if (isready == false)
+        if (isready == false && started == false)
         {
             pos = Vector3.Lerp(pos, bossPos, Time.deltaTime / 2);
             if (Vector3.Distance(bossPos, pos) < 1)
             {
                 isready = true;
+                started = true;
                 this.tag = "Boss";
             }
         }
@@ -46,7 +51,7 @@ public class Boss : Enemy
             {
                 speed = -Mathf.Abs(speed);
             }
-            Quaternion rot = Quaternion.Euler(0, (speed/15) * rollMult, 0);
+            Quaternion rot = Quaternion.Euler(0, (speed/Mathf.Abs(speed)) * rollMult, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, Mathf.Clamp01(rotSpeed));
         }
 
@@ -56,6 +61,28 @@ public class Boss : Enemy
         if (Random.value < chanceToChangeDirections)
         {
             speed *= -1;
+        }
+
+        if (health <= 200)
+        {
+            if (transformingOn == true)
+            {
+                transformTime += Time.fixedDeltaTime;
+            }
+            
+            if (secStage == false)
+            {
+                speed = 25;
+                secStage = true;
+                isready = false;
+                this.tag = "Invincible";
+            }
+            if (transformTime > 5)
+            {
+                isready = true;
+                this.tag = "Boss";
+                transformingOn = false;
+            }
         }
     }
 }

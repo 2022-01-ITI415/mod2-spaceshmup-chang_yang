@@ -105,7 +105,6 @@ public class Hero : MonoBehaviour {
             time += Time.deltaTime;
             if (time >= 10)
             {
-                invincible = false;
                 NotInvincible();
                 time = 0;
             }
@@ -151,7 +150,6 @@ public class Hero : MonoBehaviour {
         {
             if (invincible == false)
             {
-                invincible = true;
                 IsInvincible();
                 time = 8;
                 shieldLevel--;
@@ -175,8 +173,7 @@ public class Hero : MonoBehaviour {
         {
             case WeaponType.shield:
                 if (_shieldLevel == 4)
-                {
-                    invincible = true;
+                {          
                     IsInvincible();
                     time = 0;
                 }
@@ -243,8 +240,9 @@ public class Hero : MonoBehaviour {
         }
     }
 
-    void IsInvincible()
+    public void IsInvincible()
     {
+        invincible = true;
         foreach (Material m in materials)
         {
             m.color = Color.yellow;
@@ -253,6 +251,7 @@ public class Hero : MonoBehaviour {
 
     void NotInvincible()
     {
+        invincible = false;
         for (int i = 0; i < materials.Length; i++)
         {
             materials[i].color = originalColors[i];

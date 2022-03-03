@@ -4477,7 +4477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 15
   fireRate: 0.3
-  health: 300
+  health: 500
   showDamageDuration: 0.1
   powerUpDropChance: 1
   originalColors: []
@@ -4490,6 +4490,8 @@ MonoBehaviour:
   rollMult: -20
   rotSpeed: 0.02
   isready: 0
+  secStage: 0
+  transformTime: 0
 --- !u!114 &4103288522460932534
 MonoBehaviour:
   m_ObjectHideFlags: 0

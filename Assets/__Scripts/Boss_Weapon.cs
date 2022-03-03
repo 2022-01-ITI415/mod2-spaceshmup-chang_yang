@@ -24,6 +24,7 @@ public class Boss_Weapon : MonoBehaviour
     public float nextFire;
     private float lasTime;
     private bool isready;
+    private bool transformed = false;
     private bool lasOn = false;
     private GameObject las;
     // Start is called before the first frame update
@@ -40,6 +41,12 @@ public class Boss_Weapon : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (boss.GetComponent<Boss>().secStage == true && transformed == false) 
+        {
+            fireRate = fireRate / 2;
+            boomSpeed = boomSpeed * 1.5f;
+            transformed = true;
+        }
         isready = boss.GetComponent<Boss>().isready;
         if (isready == true )
         {

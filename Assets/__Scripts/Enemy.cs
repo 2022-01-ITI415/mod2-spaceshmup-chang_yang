@@ -97,6 +97,13 @@ public class Enemy : MonoBehaviour {
                 health -= Main.GetWeaponDefinition(p.type).damageOnHit;
                 if(health <= 0)
                 {
+                    if (this.tag == "Boss")
+                    {
+                        Main.S.DelayedRestart(Main.S.gameRestartDelay);
+                        Hero.S.IsInvincible();
+                        Main.S.Win();
+                    }
+
                     // Tell the Main singleton that this ship was destroyed
                     if (!notifiedOfDestruction)
                     {
