@@ -21,10 +21,14 @@ public class Main : MonoBehaviour
         WeaponType.blaster, WeaponType.blaster, WeaponType.spread, WeaponType.shield
     };
 
+    [Header("Others")]
     public Text scoreGT;
     public int score = 0;
     public int health = 5;
+    public int skill = 3;
     public GameObject boss;
+    public GameObject wingPlane;
+    public List<GameObject> wingList;
 
     private BoundsCheck bndCheck;
 
@@ -33,6 +37,15 @@ public class Main : MonoBehaviour
         GameObject scoreGO = GameObject.Find("ScoreCounter");
         scoreGT = scoreGO.GetComponent<Text>();
         scoreGT.text = "Score: 0";
+
+        for (int i = 0; i < skill; i++)
+        {
+            GameObject wingGO = Instantiate(wingPlane) as GameObject;
+            Vector3 pos = new Vector3(-63, -37, 0);
+            pos.x = pos.x + (5 * i);
+            wingGO.transform.position = pos;
+            wingList.Add(wingGO);
+        }
     }
 
     public void ShipDestroyed(Enemy e)

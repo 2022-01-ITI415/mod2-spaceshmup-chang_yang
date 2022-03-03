@@ -20,7 +20,6 @@ public class Hero : MonoBehaviour {
     public float _shieldLevel = 1;
     [Header("Set Skill")]
     public GameObject skillPrefab;
-    public int skill = 3;
     public float skillTime = 5;
     
     private bool invincible = false;
@@ -86,14 +85,19 @@ public class Hero : MonoBehaviour {
         {
             fireDelegate();
         }
-        if (Input.GetKeyDown(KeyCode.E) && skill > 0 && skillOn == false)
+        
+        if (Input.GetKeyDown(KeyCode.E) && Main.S.skill > 0 && skillOn == false)
         {
             UseSkill();
             skillOn = true;
             invincible = true;
             IsInvincible();
             time = 10 - skillTime;
-            skill -= 1;
+            Main.S.skill -= 1;
+            int wingIndex = Main.S.wingList.Count - 1;
+            GameObject wingGO = Main.S.wingList[wingIndex];
+            Main.S.wingList.RemoveAt(wingIndex);
+            Destroy(wingGO);
         }
 
         if (invincible == true)
