@@ -50,6 +50,18 @@ public class Main : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            Restart();
+        }
+    }
+
     public void ShipDestroyed(Enemy e)
     {
         // Potentially generate a PowerUp

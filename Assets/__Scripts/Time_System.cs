@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class Time_System : MonoBehaviour
 {
-    public float totalTime;
+    static public Time_System S;
     public float levelTimeInterval = 30;
     public float level_1_ESPS = 0.5f;
     public float level_2_ESPS = 1f;
     public float level_3_ESPS = 1.5f;
     public float level_4_ESPS = 2f;
 
-    private float time = 0;
+    public float time = 0;
     private int level = 0;
 
     private int hour;

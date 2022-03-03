@@ -46,6 +46,10 @@ public class Boss_Weapon : MonoBehaviour
             fireRate = fireRate / 2;
             boomSpeed = boomSpeed * 1.5f;
             transformed = true;
+            lasTime = 0;
+            nextFire = 0;
+            Destroy(las);
+            lasOn = false;
         }
         isready = boss.GetComponent<Boss>().isready;
         if (isready == true )
@@ -63,7 +67,7 @@ public class Boss_Weapon : MonoBehaviour
             if (lasOn == true)
             {
                 lasTime = lasTime + Time.fixedDeltaTime;
-                if (lasTime <= 5)
+                if (lasTime < 5)
                 {
                     LaserFollow();
                 }
