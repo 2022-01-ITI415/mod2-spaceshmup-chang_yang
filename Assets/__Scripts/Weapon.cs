@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -67,6 +67,10 @@ public class Weapon : MonoBehaviour {
         if(rootGO.GetComponent<Hero>() != null)
         {
             rootGO.GetComponent<Hero>().fireDelegate += Fire;
+        }
+        if (rootGO.GetComponent<Skill>() != null)
+        {
+            rootGO.GetComponent<Skill>().fireDelegate += Fire;
         }
     }
 

@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 
+    static public Enemy S;
     [Header("Set in Inspector: Enemy")]
     public float speed = 10f; // The speed in m/s
     public float fireRate = 0.3f; // Seconds/shot (Unused)
-    public float health = 10;
-    public int score = 100; // Points earned for destroying this
+    public float health = 5f; // Points earned for destroying this
     public float showDamageDuration = 0.1f; // # seconds to show damage
     public float powerUpDropChance = 1f; // Chance to drop a power-up
 
@@ -18,9 +19,9 @@ public class Enemy : MonoBehaviour {
     public bool showingDamage = false;
     public float damageDoneTime; // Time to stop showing damage
     public bool notifiedOfDestruction = false; // Will be used later
-
+    private int limit = 0;
     protected BoundsCheck bndCheck;
-
+    
     private void Awake()
     {
         bndCheck = GetComponent<BoundsCheck>();
@@ -84,11 +85,25 @@ public class Enemy : MonoBehaviour {
                 }
 
                 // Hurt this Enemy
+                if (this.tag == "Invincible")
+                {
+                    BossInvcible();
+                    Destroy(otherGO);
+                    break;
+                }
+
                 ShowDamage();
                 // Get the damage amount from the Main WEAP_DICT
                 health -= Main.GetWeaponDefinition(p.type).damageOnHit;
                 if(health <= 0)
                 {
+                    if (this.tag == "Boss")
+                    {
+                        Main.S.DelayedRestart(Main.S.gameRestartDelay);
+                        Hero.S.IsInvincible();
+                        Main.S.Win();
+                    }
+
                     // Tell the Main singleton that this ship was destroyed
                     if (!notifiedOfDestruction)
                     {
@@ -97,6 +112,7 @@ public class Enemy : MonoBehaviour {
                     notifiedOfDestruction = true;
                     // Destroy this enemy
                     Destroy(this.gameObject);
+                    Main.S.GetScore();
                 }
                 Destroy(otherGO);
                 break;
@@ -112,6 +128,16 @@ public class Enemy : MonoBehaviour {
         foreach (Material m in materials)
         {
             m.color = Color.red;
+        }
+        showingDamage = true;
+        damageDoneTime = Time.time + showDamageDuration;
+    }
+
+    void BossInvcible()
+    {
+        foreach (Material m in materials)
+        {
+            m.color = Color.yellow;
         }
         showingDamage = true;
         damageDoneTime = Time.time + showDamageDuration;

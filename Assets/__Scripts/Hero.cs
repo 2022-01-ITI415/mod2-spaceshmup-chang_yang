@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Hero : MonoBehaviour {
     static public Hero S; // Singleton
-
+    
     [Header("Set in Inspector")]
     // These fields control the movement of the ship
     public float speed = 30;
@@ -14,10 +15,15 @@ public class Hero : MonoBehaviour {
     public GameObject projectilePrefab;
     public float projectileSpeed = 40;
     public Weapon[] weapons;
-
     [Header("Set Dynamically")]
     [SerializeField]
     public float _shieldLevel = 1;
+    [Header("Set Skill")]
+    public GameObject skillPrefab;
+    public float skillTime = 5;
+    
+    private bool invincible = false;
+    public bool skillOn = false;
 
     // This variable holds a reference to the last triggering GameObject
     private GameObject lastTriggerGo = null;
@@ -27,7 +33,12 @@ public class Hero : MonoBehaviour {
     // Create a WeaponFireDelegate field named fireDelegate.
     public WeaponFireDelegate fireDelegate;
 
-	void Start()
+    public float time = 0;
+
+    public Color[] originalColors;
+    public Material[] materials;
+
+    void Start()
     {
         if (S == null)
         {
@@ -42,6 +53,13 @@ public class Hero : MonoBehaviour {
         // Reset the weapons to start _Hero with 1 blaster
         ClearWeapons();
         weapons[0].SetType(WeaponType.blaster);
+
+        materials = Utils.GetAllMaterials(gameObject);
+        originalColors = new Color[materials.Length];
+        for (int i = 0; i < materials.Length; i++)
+        {
+            originalColors[i] = materials[i].color;
+        }
     }
 	
 	// Update is called once per frame
@@ -67,6 +85,30 @@ public class Hero : MonoBehaviour {
         {
             fireDelegate();
         }
+        
+        if (Input.GetKeyDown(KeyCode.E) && Main.S.skill > 0 && skillOn == false)
+        {
+            UseSkill();
+            skillOn = true;
+            invincible = true;
+            IsInvincible();
+            time = 10 - skillTime;
+            Main.S.skill -= 1;
+            int wingIndex = Main.S.wingList.Count - 1;
+            GameObject wingGO = Main.S.wingList[wingIndex];
+            Main.S.wingList.RemoveAt(wingIndex);
+            Destroy(wingGO);
+        }
+
+        if (invincible == true)
+        {
+            time += Time.deltaTime;
+            if (time >= 10)
+            {
+                NotInvincible();
+                time = 0;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -76,16 +118,43 @@ public class Hero : MonoBehaviour {
         print("Triggered: " + go.name);
 
         // Make sure it's not the same triggering go as last time
-        if (go == lastTriggerGo)
+        if (go.tag != "Laser" )
         {
-            return;
+            if (go == lastTriggerGo)
+            {
+                return;
+            }
         }
         lastTriggerGo = go;
 
-        if(go.tag == "Enemy")
+        if(go.tag == "Enemy" || go.tag == "ProjectileEnemy")
         {
-            shieldLevel--;
-            Destroy(go);
+            if (invincible == true)
+            {
+                Main.S.GetScore();
+                Destroy(go);
+            }
+            else
+            {
+                shieldLevel--;
+                Destroy(go);
+            }
+        }
+        else if (go.tag == "Boss" || go.tag == "Invincible")
+        {
+            if (invincible == false)
+            {
+                shieldLevel -= 5;
+            }
+        }
+        else if (go.tag == "Laser")
+        {
+            if (invincible == false)
+            {
+                IsInvincible();
+                time = 8;
+                shieldLevel--;
+            }
         }
         else if (go.tag == "PowerUp")
         {
@@ -104,6 +173,11 @@ public class Hero : MonoBehaviour {
         switch (pu.type)
         {
             case WeaponType.shield:
+                if (_shieldLevel == 4)
+                {          
+                    IsInvincible();
+                    time = 0;
+                }
                 shieldLevel++;
                 break;
 
@@ -165,5 +239,32 @@ public class Hero : MonoBehaviour {
         {
             w.SetType(WeaponType.none);
         }
+    }
+
+    public void IsInvincible()
+    {
+        invincible = true;
+        foreach (Material m in materials)
+        {
+            m.color = Color.yellow;
+        }
+    }
+
+    void NotInvincible()
+    {
+        invincible = false;
+        for (int i = 0; i < materials.Length; i++)
+        {
+            materials[i].color = originalColors[i];
+        }
+    }
+
+    void UseSkill()
+    {
+        GameObject go = Instantiate<GameObject>(skillPrefab);
+
+        Vector3 pos = transform.position;
+        pos.y = pos.y -80;
+        go.transform.position = pos;
     }
 }

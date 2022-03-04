@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class Main : MonoBehaviour {
+public class Main : MonoBehaviour
+{
 
     static public Main S; // A singleton for Main
     static Dictionary<WeaponType, WeaponDefinition> WEAP_DICT;
 
     [Header("Set in Inspector")]
     public GameObject[] prefabEnemies; // Array of Enemy prefabs
-    public float enemySpawnPerSecond = 0.5f; // # Enemies/second
+    public float enemySpawnPerSecond = 0.2f; // # Enemies/second
     public float enemyDefaultPadding = 1.5f; // Padding for position
     public WeaponDefinition[] weaponDefinitions;
     public GameObject prefabPowerUp;
@@ -19,9 +21,48 @@ public class Main : MonoBehaviour {
         WeaponType.blaster, WeaponType.blaster, WeaponType.spread, WeaponType.shield
     };
 
+    [Header("Others")]
+    public float gameRestartDelay = 5f;
+    public Text scoreGT;
+    public int score = 0;
+    public int health = 5;
+    public int skill = 3;
+    public GameObject boss;
+    public GameObject wingPlane;
+    public GameObject win;
+    public List<GameObject> wingList;
+
     private BoundsCheck bndCheck;
 
-    public void ShipDestroyed( Enemy e)
+    private void Start()
+    {
+        GameObject scoreGO = GameObject.Find("ScoreCounter");
+        scoreGT = scoreGO.GetComponent<Text>();
+        scoreGT.text = "Score: 0";
+
+        for (int i = 0; i < skill; i++)
+        {
+            GameObject wingGO = Instantiate(wingPlane) as GameObject;
+            Vector3 pos = new Vector3(-63, -37, 0);
+            pos.x = pos.x + (5 * i);
+            wingGO.transform.position = pos;
+            wingList.Add(wingGO);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            Restart();
+        }
+    }
+
+    public void ShipDestroyed(Enemy e)
     {
         // Potentially generate a PowerUp
         if (Random.value <= e.powerUpDropChance)
@@ -52,7 +93,7 @@ public class Main : MonoBehaviour {
 
         // A generic Dictionary with WeaponType as the key
         WEAP_DICT = new Dictionary<WeaponType, WeaponDefinition>();
-        foreach(WeaponDefinition def in weaponDefinitions)
+        foreach (WeaponDefinition def in weaponDefinitions)
         {
             WEAP_DICT[def.type] = def;
         }
@@ -63,6 +104,7 @@ public class Main : MonoBehaviour {
         // Pick a random Enemy prefab to instantiate
         int ndx = Random.Range(0, prefabEnemies.Length);
         GameObject go = Instantiate<GameObject>(prefabEnemies[ndx]);
+        go.GetComponent<Enemy>().health = this.health;
 
         // Position the ENemy above the screen with a random x position
         float enemyPadding = enemyDefaultPadding;
@@ -115,4 +157,29 @@ public class Main : MonoBehaviour {
         // which means it has failed to find the right WeaponDefinition
         return new WeaponDefinition();
     }
+
+    public void GetScore()
+    {
+        score += 100;
+        scoreGT.text = "Score: " + score.ToString();
+        if (score > HighScore.score)
+        {
+            HighScore.score = score;
+        }
+    }
+
+    public void SpawnBoss()
+    {
+        GameObject go = Instantiate<GameObject>(boss);
+
+
+        Vector3 pos = Vector3.zero;
+        pos.y = 60;
+        go.transform.position = pos;
+    }
+
+    public void Win()
+    {
+        win.SetActive(true);
+}
 }
